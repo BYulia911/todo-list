@@ -1,9 +1,9 @@
 <template>
     <span v-bind:class="{done: todo.completed}">
         <input type="checkbox" v-on:change="todo.completed = !todo.completed">
-        <strong>{{ todo.number }}</strong>
+        <strong>{{ index + 1 }}</strong>
         {{ todo.title }}
-        <button class="rm">&times;</button>
+        <button class="rm" v-on:click="$emit('remove-todo', todo.id)">&times;</button>
     </span>
 </template>
 
@@ -13,7 +13,8 @@ export default{
         todo: {
             type: Object,
             required: true
-        }
+        },
+        index: Number
     }
 }
 </script>
