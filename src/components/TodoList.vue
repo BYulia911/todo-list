@@ -2,9 +2,8 @@
     <div>
         <ul>
             <TodoItem
-            v-for="(todo, i) of todos"
+            v-for="todo of todos"
             v-bind:todo="todo"
-            v-bind:index="i"
             v-on:remove-todo="removeTodo"
             />
         </ul>
@@ -14,7 +13,12 @@
 <script>
 import TodoItem from './TodoItem.vue';
 export default {
-    props: ['todos'],
+    props: {
+        todos: {
+            type: Array,
+            required: true
+        }
+    },
     components: {
         TodoItem
     },
@@ -31,5 +35,7 @@ ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 </style>

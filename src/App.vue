@@ -5,9 +5,12 @@
   />
   <hr>
   <TodoList
+    v-if="todos.length"
     v-bind:todos="todos"
+    @toggle-completed="toggleCompleted"
     @remove-todo="removeTodo"
   />
+  <p v-else>No todos!</p>
 </template>
 
 <script>
@@ -17,11 +20,7 @@
     name: 'app',
     data() {
       return {
-        todos: [
-          {id: 1, title: "Купить хлеб", completed: false},
-          {id: 2, title: "Побегать", completed: false},
-          {id: 3, title: "Сделать домашку", completed: false}
-        ]
+        todos: JSON.parse(localStorage.getItem('todos')) || []
       }
     },
     components: {
@@ -29,11 +28,23 @@
       AddTodo
     },
     methods: {
-      removeTodo (id) {
-        this.todos = this.todos.filter(t => t.id != id);
+      toggleCompleted(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+          todo.completed = !todo.completed;
+          this.updateLocalStorage();
+        }
       },
-      addTodo (todo) {
+      removeTodo(id) {
+        this.todos = this.todos.filter(todo => todo.id !== id);
+        this.updateLocalStorage();
+      },
+      addTodo(todo) {
         this.todos.push(todo);
+        this.updateLocalStorage();
+      },
+      updateLocalStorage() {
+        localStorage.setItem('todos', JSON.stringify(this.todos));
       }
     }
   }
